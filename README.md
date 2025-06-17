@@ -16,12 +16,12 @@
 
 ✅ Dashboard financeiro com saldo da carteira  
 ✅ Visualização gráfica de receitas e despesas  
-✅ Gráfico para acompanhamento mensal
+✅ Gráfico para acompanhamento mensal  
 ✅ Gráfico de gastos por categoria  
 ✅ Seção de visão geral: Contas, Receitas e Despesas  
 ✅ Calculadora integrada  
 ✅ Layout 100% responsivo  
-✅ Estrutura modular e fácil de expandir
+✅ Estrutura modular e fácil de expandir  
 ✅ (Outras funcionalidades futuras a serem adicionadas)
 
 ---
