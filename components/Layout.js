@@ -21,6 +21,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingTop: 80, // espaço para não cobrir o conteúdo
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
   },
 });

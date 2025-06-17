@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Transacoes from './pages/Transacoes';
 import Configuracoes from './pages/Configuracoes';
 import Sobre from './pages/Sobre';
+import Calculadora from './pages/Calculadora';
 
 import Layout from './components/Layout';
 import BotaoAdd from './components/BotaoAdd';
@@ -24,7 +25,7 @@ export default function App() {
           )}
         </Drawer.Screen>
 
-        <Drawer.Screen name="Transacoes">
+        <Drawer.Screen name="Transações">
           {() => (
             <Layout>
               <Transacoes />
@@ -32,7 +33,15 @@ export default function App() {
           )}
         </Drawer.Screen>
 
-        <Drawer.Screen name="Configuracoes">
+        <Drawer.Screen name="Calculadora">
+          {() => (
+            <Layout>
+              <Calculadora />
+            </Layout>
+          )}
+        </Drawer.Screen>
+
+        <Drawer.Screen name="Configurações">
           {() => (
             <Layout>
               <Configuracoes />

@@ -1,34 +1,48 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function BotaoAdd() {
   const [visivel, setVisivel] = useState(false);
+  const navigation = useNavigation(); // Hook para acessar a navegação
 
   const toggleMenu = () => {
     setVisivel(!visivel);
+  };
+
+  // Função genérica para navegar e fechar o menu
+  const handleNavigate = (screenName) => {
+    navigation.navigate(screenName);
+    setVisivel(false);
   };
 
   return (
     <View style={styles.container}>
       {visivel && (
         <View style={styles.overlay}>
-          <View style={styles.opcao}>
+          {/* Opção Receitas */}
+          <TouchableOpacity style={styles.opcao} onPress={() => handleNavigate('AdicionarReceita')}>
             <Image source={require('../assets/mais.png')} style={styles.icone} />
             <Text style={styles.texto}>Receitas</Text>
-          </View>
-          <View style={styles.opcao}>
+          </TouchableOpacity>
+
+          {/* Opção Despesas */}
+          <TouchableOpacity style={styles.opcao} onPress={() => handleNavigate('AdicionarDespesa')}>
             <Image source={require('../assets/menos.png')} style={styles.icone} />
             <Text style={styles.texto}>Despesas</Text>
-          </View>
-          <View style={styles.opcao}>
+          </TouchableOpacity>
+
+          {/* Opção Calculadora */}
+          <TouchableOpacity style={styles.opcao} onPress={() => handleNavigate('Calculadora')}>
             <Image source={require('../assets/logo1.png')} style={styles.icone} />
             <Text style={styles.texto}>Calculadora</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       )}
 
       <TouchableOpacity style={styles.fab} onPress={toggleMenu}>
-        <Text style={styles.fabText}>+</Text>
+        {/* Mostra um 'X' se o menu estiver aberto, ou '+' se estiver fechado */}
+        <Text style={styles.fabText}>{visivel ? '✕' : '+'}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -48,12 +62,17 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 5,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 4,
   },
   fabText: {
     color: '#fff',
     fontSize: 30,
     fontWeight: 'bold',
+    lineHeight: 32, // Ajuste para centralizar melhor o + e o X
   },
   overlay: {
     backgroundColor: '#fff',
@@ -69,7 +88,7 @@ const styles = StyleSheet.create({
   opcao: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    paddingVertical: 8, // Aumenta a área de toque
   },
   icone: {
     width: 28,
