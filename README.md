@@ -2,7 +2,7 @@
 
 > **Seu companheiro inteligente para controle financeiro pessoal.**
 
-![FindCheck Banner](./assets/banner.png) <!-- Adicionar Banner (pendente) -->
+![FindCheck Banner](./docs/banner.gif) <!-- Adicionar Banner (pendente) -->
 
 ---
 
@@ -29,8 +29,8 @@
 ## 🔍 Prévia
 
 <div align="center">
-  <img src="./assets/screenshot-dashboard.png" alt="Dashboard Screenshot" width="250" />
-  <img src="./assets/screenshot-piechart.png" alt="Pie Chart Screenshot" width="250" />
+  <img src="./docs/screenshot-dashboard.png" alt="Dashboard Screenshot" width="250" />
+  <img src="./docs/screenshot-piechart.png" alt="Pie Chart Screenshot" width="250" />
 </div>
 
 ---
