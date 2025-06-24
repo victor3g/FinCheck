@@ -13,20 +13,18 @@ export default function TransactionModal({ visible, onClose, onSave, onUpdate, t
     useEffect(() => {
         if (visible) {
             if (isEditing) {
-                // Se está editando, preenche os campos com os dados da transação
                 setIsExpense(transactionToEdit.type === 'despesa');
                 setAmount(transactionToEdit.amount.toString());
                 setDescription(transactionToEdit.description);
                 setCategory(transactionToEdit.category);
             } else {
-                // Se está criando uma nova, usa o 'defaultType' para definir o botão
                 setIsExpense(defaultType === 'despesa');
                 setAmount('');
                 setDescription('');
                 setCategory('');
             }
         }
-    }, [transactionToEdit, visible, defaultType]); // <-- CORREÇÃO APLICADA AQUI
+    }, [transactionToEdit, visible, defaultType]);
 
     const handleSave = () => {
         if (!amount || !description || !category) {
@@ -74,7 +72,6 @@ export default function TransactionModal({ visible, onClose, onSave, onUpdate, t
 
 // Estilos
 const styles = StyleSheet.create({
-    // A ÚNICA MUDANÇA ESTÁ AQUI, NA PRIMEIRA LINHA
     modalContainer: { 
         flex: 1, 
         justifyContent: 'center', 

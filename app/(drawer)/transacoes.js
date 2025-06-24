@@ -5,7 +5,7 @@ import { useTransactions } from '../../context/TransactionsContext';
 import { Colors } from '../../constants/Colors';
 import TransactionModal from '../../components/TransactionModal';
 
-// O item da lista agora tem os botões de ação
+
 const TransactionItem = ({ item, onEdit, onDelete }) => {
     const isReceita = item.type === 'receita';
     const amountColor = isReceita ? Colors.success : Colors.danger;
@@ -39,7 +39,7 @@ const TransactionItem = ({ item, onEdit, onDelete }) => {
 export default function TransacoesScreen() {
     const { transactions, loading, addTransaction, updateTransaction, deleteTransaction } = useTransactions();
     
-    // Estado para controlar o modal e a transação selecionada
+
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
 
@@ -48,7 +48,7 @@ export default function TransacoesScreen() {
         setModalVisible(true);
     };
     
-    // Função para fechar o modal e limpar a seleção
+ 
     const handleCloseModal = () => {
         setModalVisible(false);
         setSelectedTransaction(null);
@@ -65,7 +65,7 @@ export default function TransacoesScreen() {
             <TransactionModal
                 visible={modalVisible}
                 onClose={handleCloseModal}
-                onSave={addTransaction} // Não usamos para adicionar aqui, mas a prop é esperada
+                onSave={addTransaction} 
                 onUpdate={updateTransaction}
                 transactionToEdit={selectedTransaction}
             />
@@ -82,7 +82,7 @@ export default function TransacoesScreen() {
                         <TransactionItem 
                             item={item} 
                             onEdit={handleEdit}
-                            onDelete={deleteTransaction} // Passa a função de deletar diretamente
+                            onDelete={deleteTransaction}
                         />
                     )}
                     contentContainerStyle={styles.list}
@@ -92,7 +92,6 @@ export default function TransacoesScreen() {
     );
 }
 
-// Estilos atualizados para acomodar os novos botões
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: Colors.background },
     list: { padding: 15 },

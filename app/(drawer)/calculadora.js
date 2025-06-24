@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-// Vamos usar nossa paleta de cores central
+
 import { Colors } from '../../constants/Colors'; 
 
-// Hook para gerenciar as dimensões e layout dos botões
+
 const useButtonDimensions = () => {
     const screenWidth = Dimensions.get('window').width;
-    // Ajustando margens para um visual mais limpo
+
     const padding = 20;
     const buttonMargin = 10;
     const buttonContainerWidth = screenWidth - (2 * padding);
@@ -14,7 +14,6 @@ const useButtonDimensions = () => {
     return { buttonSize, buttonMargin };
 };
 
-// Componente reutilizável para cada botão, agora com temas do app
 const CalculatorButton = ({ text, onPress, theme = 'number', size = 'single' }) => {
     const { buttonSize, buttonMargin } = useButtonDimensions();
 
@@ -23,16 +22,16 @@ const CalculatorButton = ({ text, onPress, theme = 'number', size = 'single' }) 
 
     switch(theme) {
         case 'operator':
-            backgroundColor = Colors.primary; // Verde principal
+            backgroundColor = Colors.primary;
             textColor = Colors.white;
             break;
         case 'special':
-            backgroundColor = '#E0E0E0'; // Um cinza claro e neutro
+            backgroundColor = '#E0E0E0';
             textColor = Colors.text;
             break;
         case 'number':
         default:
-            backgroundColor = Colors.cardBackground; // Branco
+            backgroundColor = Colors.cardBackground;
             textColor = Colors.text;
             break;
     }
@@ -65,7 +64,7 @@ export default function CalculadoraScreen() {
     const [firstValue, setFirstValue] = useState('');
     const [waitingForOperand, setWaitingForOperand] = useState(false);
 
-    // A lógica da calculadora permanece exatamente a mesma
+
     const handleNumberInput = (num) => {
         if (waitingForOperand) {
             setDisplayValue(String(num));
@@ -130,7 +129,6 @@ export default function CalculadoraScreen() {
                 <Text style={styles.displayText} numberOfLines={1} adjustsFontSizeToFit>{displayValue}</Text>
             </View>
             <View style={styles.buttonsContainer}>
-                {/* As linhas de botões agora usam os novos temas */}
                 <View style={styles.row}>
                     <CalculatorButton text="AC" theme="special" onPress={handleButtonPress} />
                     <CalculatorButton text="+/-" theme="special" onPress={handleButtonPress} />
@@ -165,11 +163,11 @@ export default function CalculadoraScreen() {
     );
 }
 
-// ESTILOS ATUALIZADOS PARA O NOVO TEMA
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.background, // Fundo padrão do app
+        backgroundColor: Colors.background,
     },
     displayContainer: {
         flex: 1,
@@ -179,7 +177,7 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
     },
     displayText: {
-        color: Colors.text, // Cor de texto padrão
+        color: Colors.text,
         fontSize: 80,
         fontWeight: '300',
     },
@@ -196,8 +194,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 50,
-        borderWidth: 1, // Borda sutil para botões brancos
-        borderColor: Colors.borderColor, // Cor da borda padrão
+        borderWidth: 1,
+        borderColor: Colors.borderColor,
     },
     buttonText: {
         fontSize: 32,

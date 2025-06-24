@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Alert, ActivityIndicator } from 'react-native';
 import { LineChart, PieChart } from 'react-native-chart-kit'; 
 import { Ionicons, Feather } from '@expo/vector-icons';
-import { useRouter } from 'expo-router'; // IMPORTAR O ROUTER
+import { useRouter } from 'expo-router';
 import { useTransactions } from '../../context/TransactionsContext';
 import { Colors } from '../../constants/Colors';
 import TransactionModal from '../../components/TransactionModal';
@@ -15,7 +15,7 @@ const ActionRow = ({ icon, text, color = Colors.text, onPress }) => (<TouchableO
 const pieChartColorPalette = ['#60A5FA', '#FBBF24', '#4ADE80', '#F87171', '#A78BFA', '#2DD4BF'];
 
 export default function ResumoScreen() {
-    const router = useRouter(); // Inicializar o router
+    const router = useRouter();
     const [isBalanceVisible, setIsBalanceVisible] = useState(true);
     const [transactionModalVisible, setTransactionModalVisible] = useState(false);
     const [selectionModalVisible, setSelectionModalVisible] = useState(false);
@@ -25,7 +25,6 @@ export default function ResumoScreen() {
     const openTransactionModal = (type) => { setModalType(type); setTransactionModalVisible(true); };
     const handleSelectAndOpen = (type) => { setSelectionModalVisible(false); openTransactionModal(type); };
     
-    // As lógicas de dados continuam aqui, sem alteração
     const financialData = useMemo(() => { const totalReceitas = transactions.filter(t => t.type === 'receita').reduce((sum, t) => sum + t.amount, 0); const totalDespesas = transactions.filter(t => t.type === 'despesa').reduce((sum, t) => sum + t.amount, 0); return { saldo: totalReceitas - totalDespesas }; }, [transactions]);
     const multiMonthLineChartData = useMemo(() => { const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]; const today = new Date(); const labels = []; const incomeData = []; const expenseData = []; for (let i = 5; i >= 0; i--) { const d = new Date(today.getFullYear(), today.getMonth() - i, 1); const month = d.getMonth(); const year = d.getFullYear(); labels.push(monthNames[month]); const monthlyTransactions = transactions.filter(t => { const transactionDate = new Date(t.date); return transactionDate.getMonth() === month && transactionDate.getFullYear() === year; }); const income = monthlyTransactions.filter(t => t.type === 'receita').reduce((sum, t) => sum + t.amount, 0); const expense = monthlyTransactions.filter(t => t.type === 'despesa').reduce((sum, t) => sum + t.amount, 0); incomeData.push(income); expenseData.push(expense); } return { labels, datasets: [ { data: incomeData, color: (opacity = 1) => Colors.success, strokeWidth: 3 }, { data: expenseData, color: (opacity = 1) => Colors.danger, strokeWidth: 3 } ], legend: ["Receitas", "Despesas"] }; }, [transactions]);
     const pieChartData = useMemo(() => { const expensesByCategory = transactions.filter(t => t.type === 'despesa').reduce((acc, t) => { if (acc[t.category]) { acc[t.category] += t.amount; } else { acc[t.category] = t.amount; } return acc; }, {}); return Object.keys(expensesByCategory).map((category, index) => ({ name: category, population: expensesByCategory[category], color: pieChartColorPalette[index % pieChartColorPalette.length] })); }, [transactions]);
@@ -74,9 +73,9 @@ export default function ResumoScreen() {
                                 chartConfig={lineChartConfig}
                                 accessor={"population"}
                                 backgroundColor={"transparent"}
-                                hasLegend={false} // REMOVENDO A LEGENDA
-                                paddingLeft={"25"} // Centralizando melhor
-                                absolute // Mostra os valores absolutos, não porcentagens
+                                hasLegend={false}
+                                paddingLeft={"25"}
+                                absolute
                             />
                         </View>
                     </TouchableOpacity>
@@ -91,7 +90,6 @@ export default function ResumoScreen() {
         </View>
     );
 }
-//... Estilos e Configs do Gráfico (sem mudanças)
 const lineChartConfig = { 
     backgroundColor: '#ffffff', 
     backgroundGradientFrom: '#ffffff', 

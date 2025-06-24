@@ -6,7 +6,7 @@ import { Colors } from '../../constants/Colors';
 
 const screenWidth = Dimensions.get('window').width;
 
-// Componente para a lista de categorias
+
 const CategoryDetailItem = ({ name, total, percentage }) => (
     <View style={styles.categoryItem}>
         <View style={styles.categoryInfo}>
@@ -116,7 +116,6 @@ export default function GraficosScreen() {
                 <Text style={styles.cardTitle}>Análise de Despesas por Categoria</Text>
                 {categoryData.details.map(item => <CategoryDetailItem key={item.name} {...item} />)}
             </View>
-            {/* A CORREÇÃO FOI AQUI, na tag de fechamento </View> */}
 
             <View style={styles.card}>
                  <Text style={styles.cardTitle}>Tendência de Gastos por Categoria</Text>
@@ -128,13 +127,13 @@ export default function GraficosScreen() {
                             width={screenWidth - 80}
                             height={180}
                             chartConfig={{...lineChartConfig, color: () => Colors.danger, propsForDots: { r: '3', stroke: Colors.danger}}}
-                            withVerticalLabels={true} // Mostrar os meses no eixo X
+                            withVerticalLabels={true}
                             withInnerLines={false}
                             fromZero={true}
                             style={{paddingRight: 0, paddingLeft: 0}}
-                            yAxisLabel="" // Sem R$ no eixo Y
+                            yAxisLabel=""
                             yAxisSuffix=""
-                            formatXLabel={(value) => value} // Mostrar os nomes dos meses
+                            formatXLabel={(value) => value}
                             withHorizontalLabels={false}
                         />
                     </View>

@@ -1,10 +1,9 @@
-import 'react-native-gesture-handler'; // IMPORTANTE: Deve ser a primeira linha
+import 'react-native-gesture-handler';
 
 import { Stack } from 'expo-router';
 import { TransactionsProvider } from '../context/TransactionsContext';
 
 export default function RootLayout() {
-  // ... o resto do seu código continua o mesmo
   return (
     <TransactionsProvider>
       <Stack>
