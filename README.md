@@ -49,4 +49,4 @@
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/victor3g/FinCheck.git
+git clone https://github.com/victor3g/FindCheck.git

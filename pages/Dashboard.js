@@ -1,86 +1,165 @@
-// --- Arquivo: src/screens/DashboardScreen.js ---
+import React from 'react';
+import { ScrollView, StyleSheet, View, Text, ActivityIndicator } from 'react-native';
+import { useTransactions } from '../context/TransactionContext'; // Importar o hook
+import Card from '../components/Card'; // Reutilizaremos o Card genérico
+import { LineChart, BarChart } from 'react-native-chart-kit';
+import { Dimensions } from "react-native";
 
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+const screenWidth = Dimensions.get("window").width;
 
-// Importando o serviço de API e os novos componentes
-import { getDashboardData } from '../services/api';
-import CarteiraCard from '../components/CarteiraCard';
-import VisaoGeralCard from '../components/VisaoGeralCard';
-import Grafico1 from '../components/Grafico1';
-import Grafico2 from '../components/Grafico2';
+const Dashboard = () => {
+  const {
+    transactions,
+    totalReceitas,
+    totalDespesas,
+    saldo,
+    loading
+  } = useTransactions();
 
-export default function DashboardScreen() {
-  const [dashboardData, setDashboardData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // useEffect para carregar os dados uma vez quando o componente é montado
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getDashboardData();
-        setDashboardData(data);
-      } catch (error) {
-        console.error("Erro ao buscar dados para o dashboard:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // Exibe um indicador de carregamento enquanto os dados não chegam
   if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#A020F0" />
-      </View>
-    );
+    return <ActivityIndicator size="large" color="#00A86B" style={{ flex: 1, justifyContent: 'center' }} />;
   }
 
+  // Formata os valores para moeda brasileira
+  const formatCurrency = (value) => {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  };
+
+  // Dados para o gráfico de linha (saldo ao longo do tempo)
+  const lineChartData = {
+    labels: transactions.slice(-5).map(t => new Date(t.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })),
+    datasets: [{
+      data: transactions.slice(-5).map(t => t.type === 'receita' ? parseFloat(t.amount) : -parseFloat(t.amount)),
+    },],
+  };
+
+  // Dados para o gráfico de barras (despesas por categoria)
+  const despesasPorCategoria = transactions
+    .filter(t => t.type === 'despesa')
+    .reduce((acc, t) => {
+      acc[t.category] = (acc[t.category] || 0) + parseFloat(t.amount);
+      return acc;
+    }, {});
+
+  const barChartData = {
+    labels: Object.keys(despesasPorCategoria).slice(0, 4), // Primeiras 4 categorias
+    datasets: [{
+      data: Object.values(despesasPorCategoria).slice(0, 4),
+    },],
+  };
+
+
   return (
-    <ScrollView
-      style={styles.scrollView}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.mainBox}>
-        <CarteiraCard saldoInicial={dashboardData.carteira.saldo} />
-        <VisaoGeralCard />
-        <Grafico1 data={dashboardData.grafico1} />
-        <Grafico2 data={dashboardData.grafico2} />
-      </View>
+    <ScrollView style={styles.container}>
+      {/* Card de Saldo */}
+      <Card>
+        <Text style={styles.cardTitle}>Saldo Atual</Text>
+        <Text style={[styles.saldo, saldo < 0 ? styles.negativo : styles.positivo]}>
+          {formatCurrency(saldo)}
+        </Text>
+        <View style={styles.resumoContainer}>
+          <View style={styles.resumoItem}>
+            <Text style={styles.resumoLabel}>Receitas</Text>
+            <Text style={[styles.resumoValor, styles.positivo]}>{formatCurrency(totalReceitas)}</Text>
+          </View>
+          <View style={styles.resumoItem}>
+            <Text style={styles.resumoLabel}>Despesas</Text>
+            <Text style={[styles.resumoValor, styles.negativo]}>{formatCurrency(totalDespesas)}</Text>
+          </View>
+        </View>
+      </Card>
+
+      {/* Gráfico de Linha */}
+      {transactions.length > 0 && (
+        <Card>
+          <Text style={styles.cardTitle}>Últimas Transações</Text>
+          <LineChart
+            data={lineChartData}
+            width={screenWidth - 60}
+            height={220}
+            yAxisLabel="R$"
+            yAxisSuffix=""
+            chartConfig={chartConfig}
+            bezier
+          />
+        </Card>
+      )}
+
+
+      {/* Gráfico de Barras */}
+      {Object.keys(despesasPorCategoria).length > 0 && (
+        <Card>
+          <Text style={styles.cardTitle}>Despesas por Categoria</Text>
+          <BarChart
+            data={barChartData}
+            width={screenWidth - 60}
+            height={220}
+            yAxisLabel="R$"
+            chartConfig={chartConfig}
+            verticalLabelRotation={15}
+          />
+        </Card>
+      )}
+
     </ScrollView>
   );
-}
+};
+
+const chartConfig = {
+  backgroundColor: '#e26a00',
+  backgroundGradientFrom: '#fb8c00',
+  backgroundGradientTo: '#ffa726',
+  decimalPlaces: 2,
+  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+  style: {
+    borderRadius: 16,
+  },
+  propsForDots: {
+    r: '6',
+    strokeWidth: '2',
+    stroke: '#ffa726',
+  },
+};
 
 const styles = StyleSheet.create({
-  loadingContainer: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    color: '#333'
+  },
+  saldo: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  resumoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  resumoItem: {
     alignItems: 'center',
-    backgroundColor: '#f3f4f6',
   },
-  scrollView: {
-    flex: 1,
-    backgroundColor: '#f3f4f6',
+  resumoLabel: {
+    fontSize: 14,
+    color: '#666',
   },
-  scrollContent: {
-    alignItems: 'center',
-    paddingTop: 50,
-    paddingBottom: 20,
+  resumoValor: {
+    fontSize: 18,
+    fontWeight: '600',
   },
-  mainBox: {
-    width: '98%',
-    backgroundColor: '#fff',
-    borderRadius: 15,
-    padding: 15,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 10,
-    elevation: 5,
+  positivo: {
+    color: '#5cb85c',
   },
+  negativo: {
+    color: '#d9534f',
+  }
 });
+
+export default Dashboard;
