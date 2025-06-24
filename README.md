@@ -1,4 +1,4 @@
-# 💰 FindCheck
+# 💰 FinCheck
 
 > **Seu companheiro inteligente para controle financeiro pessoal.**
 
